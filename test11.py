@@ -8,12 +8,12 @@
 
 from selenium import webdriver
 import time  
-from selenium.webdriver.common.keys import Keys 
+from selenium.webdriver.common.keys import Keys
 import chromedriver_binary
 from selenium.webdriver.common.by import By
 import pymongo
 import datetime
-
+from selenium.webdriver.common.keys import Keys
 
 # configuration with mongodb
 client = pymongo.MongoClient("mongodb://localhost:27017")
@@ -70,81 +70,130 @@ next_btn[0].click()
 time.sleep(3)
 
 # if next button is enable so this loop is working
+i = 0
+n = 0
 while True:
-    # find all list of location
-    # main_box = driver.find_elements(by=By.CLASS_NAME, value="a4gq8e-aVTXAb-haAclf-jRmmHf-hSRGPd")
-    main_box = driver.find_elements(by=By.CLASS_NAME, value="m6QErb DxyBCb kA9KIf dS8AEf ecceSd QjC7t")
-    for data in main_box:
-        print(main_box)
+    sub_box = driver.find_elements(by=By.CLASS_NAME, value="Nv2PK")
+    for sub_data in sub_box:
+        try:
+            print(0<0)
+            print(i<n*5)
+            if i<n*5:
+                print("h1")
+                i+=1
+                continue
+            if n==0 and i<n*5:
+                print("h2")
+                sub_data.click()
+                print("h3")
+                time.sleep(3)
+                print("h4")
+                i+=1
+                print("h5")
+                print(i)
+            elif n==0 and i>=n*5:
+                print("h6")
+                sub_data.send_keys(Keys.PAGE_DOWN)
+                break
+                
+            elif i<n*5:
+                sub_data.click()
+                time.sleep(3)
+                i+=1
+                print(i)
+            
+            else:
+                sub_data.send_keys(Keys.PAGE_DOWN)
+                break
+
+        except Exception as e:
+            print(e)
+        
+    n+=1
+    print("n =", n)
+        # print("main_box",sub_data.text)
+    # time.sleep(3)
+
+
+
+
+
+
+
+
+
+        # print("main_box", main_box)
     # access first location
-    main_box[1].click()
-    time.sleep(5)
+    # main_box[1].click()
+    # time.sleep(5)
 
     # finde inside location page list of location
-    list_box = driver.find_elements(by=By.CLASS_NAME, value="Ymd7jc")
+    # list_box = driver.find_elements(by=By.CLASS_NAME, value="Nv2PK")
 
     # access all location
-    for list_element in list_box:
-        database_data = {}
-        try:
-            list_element.click()
-            time.sleep(3)
-            get_name = driver.find_elements(by=By.CLASS_NAME, value="x3AX1-LfntMc-header-title-title")
-            for element in get_name:
-                if element.is_displayed():
-                    print(element.text)
-                    database_data["name"]=element.text
+    # for list_element in list_box:
+    #     database_data = {}
+    #     try:
+    #         list_element.click()
+    #         time.sleep(3)
+    #         # get_name = driver.find_elements(by=By.CLASS_NAME, value="x3AX1-LfntMc-header-title-title")
+    #         # for element in get_name:
+    #         #     if element.is_displayed():
+    #         #         print(element.text)
+    #         #         database_data["name"]=element.text
+    #     except Exception as e:
+    #         print(e)
 
-            # validation for dulicate
-            fined_name = collection.find_one({'name':element.text})
-            if fined_name:
-                pass
-            else:
-                get_address = driver.find_elements(by=By.CLASS_NAME, value='CsEnBe')
-                for i in range(len(get_address)):
-                    # Get all Data in same class For example address, mobile, website, claim
-                    data = get_address[i].get_attribute('aria-label')
-                    # split all data in ':'
-                    split_data = data.split(": ")
+    #         # validation for dulicate
+    #         fined_name = collection.find_one({'name':element.text})
+    #         if fined_name:
+    #             pass
+    #         else:
+    #             get_address = driver.find_elements(by=By.CLASS_NAME, value='CsEnBe')
+    #             for i in range(len(get_address)):
+    #                 # Get all Data in same class For example address, mobile, website, claim
+    #                 data = get_address[i].get_attribute('aria-label')
+    #                 # split all data in ':'
+    #                 split_data = data.split(": ")
                     
-                    if 'Address'in split_data:
-                        database_data["address"]=split_data[1]
+    #                 if 'Address'in split_data:
+    #                     database_data["address"]=split_data[1]
 
-                    elif 'Phone' in split_data:
-                        split_data[1]=split_data[1].replace(" ", "")
-                        database_data["mobile"]=split_data[1]
+    #                 elif 'Phone' in split_data:
+    #                     split_data[1]=split_data[1].replace(" ", "")
+    #                     database_data["mobile"]=split_data[1]
 
-                    elif 'Website' in split_data:
-                        split_data[1]=split_data[1].strip()
-                        database_data["website"]=split_data[1]
+    #                 elif 'Website' in split_data:
+    #                     split_data[1]=split_data[1].strip()
+    #                     database_data["website"]=split_data[1]
 
-                    elif 'Plus code' in split_data:
-                        database_data["shortaddress"]=split_data[1]
+    #                 elif 'Plus code' in split_data:
+    #                     database_data["shortaddress"]=split_data[1]
 
-                    elif 'Claim this business' in split_data:
-                        database_data["claim"]='Claim this business'
+    #                 elif 'Claim this business' in split_data:
+    #                     database_data["claim"]='Claim this business'
                 
-                get_rating = driver.find_elements(by=By.CLASS_NAME, value='aMPvhf-fI6EEc-KVuj8d')
-                for element in get_rating:
-                    if element.is_displayed():
-                        database_data["ratings"]=element.text
+    #             get_rating = driver.find_elements(by=By.CLASS_NAME, value='aMPvhf-fI6EEc-KVuj8d')
+    #             for element in get_rating:
+    #                 if element.is_displayed():
+    #                     database_data["ratings"]=element.text
                 
-                database_data = data_set_none(database_data)
+    #             database_data = data_set_none(database_data)
                 
-                print(database_data)
-                collection.insert_one(database_data)
-        except Exception as e:
-            pass
+    #             print(database_data)
+    #             collection.insert_one(database_data)
+    #     except Exception as e:
+    #         pass
 
-    get_name = driver.find_elements(by=By.CLASS_NAME, value="xoLGzf-LgbsSe")
-    get_name[0].click()
-    time.sleep(2)
+    # get_name = driver.find_elements(by=By.CLASS_NAME, value="xoLGzf-LgbsSe")
+    # get_name[0].click()
+    # time.sleep(2)
 
-    next_btn = driver.find_elements(by=By.ID, value="ppdPk-Ej1Yeb-LgbsSe-tJiF1e")
-    try:
-        next_btn[0].click()
-        time.sleep(2)
-    except:
-        break
+    # next_btn = driver.find_elements(by=By.ID, value="ppdPk-Ej1Yeb-LgbsSe-tJiF1e")
+    # try:
+    #     next_btn[0].click()
+    #     time.sleep(2)
+    # except:
+    #     break
 
 
